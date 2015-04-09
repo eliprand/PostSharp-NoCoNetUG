@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using NoCoUG.PostSharp.WPF.ViewModels;
+using PostSharp;
 using PostSharp.Aspects;
+using PostSharp.Extensibility;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
@@ -33,7 +36,7 @@ namespace NoCoUG.PostSharp.WPF
         private async void Update(object sender, RoutedEventArgs e)
         {
             _viewModel.Name = await BuildName();
-            _viewModel.Age = await CalculateAge();
+            _viewModel.Age = await CalculateAge(_viewModel.Age);
         }
 
         [CacheMe]
@@ -50,10 +53,10 @@ namespace NoCoUG.PostSharp.WPF
         }
 
         [CacheMe]
-        private async Task<int> CalculateAge()
+        private async Task<int> CalculateAge(int age)
         {
             await Task.Delay(5000);
-            return 2 + 3;
+            return age + 5;
         }
     }
 
@@ -74,6 +77,17 @@ namespace NoCoUG.PostSharp.WPF
         public override void OnSuccess(MethodExecutionArgs args)
         {
             _cache = args.ReturnValue;
+        }
+
+        public override bool CompileTimeValidate(MethodBase method)
+        {
+            if (method.GetParameters().Length > 0)
+            {
+                Message.Write(MessageLocation.Of(method), SeverityType.Error, "SE1234",
+                    "CacheMe can only be applied to methods without parameters");
+                return false;
+            }
+            return true;
         }
     }
 }
