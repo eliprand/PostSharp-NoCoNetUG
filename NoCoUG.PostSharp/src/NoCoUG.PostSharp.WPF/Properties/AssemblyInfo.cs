@@ -56,4 +56,3 @@ using PostSharp.Patterns.Model;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: NotifyPropertyChanged(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.ViewModels.*", AttributePriority = 1)]
-[assembly: NotifyPropertyChanged(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.ViewModels.MainViewModel", AttributePriority = 2, AttributeExclude = true)]

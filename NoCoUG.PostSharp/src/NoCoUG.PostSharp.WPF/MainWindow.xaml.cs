@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using NoCoUG.PostSharp.WPF.ViewModels;
-using PostSharp.Patterns.Model;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 namespace NoCoUG.PostSharp.WPF
 {
