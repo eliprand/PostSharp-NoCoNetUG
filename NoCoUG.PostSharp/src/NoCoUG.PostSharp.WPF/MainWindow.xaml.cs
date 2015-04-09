@@ -1,5 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using NoCoUG.PostSharp.WPF.ViewModels;
+using PostSharp.Aspects;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 
@@ -18,16 +24,56 @@ namespace NoCoUG.PostSharp.WPF
 
             _viewModel = new MainViewModel
             {
-                Name = "Bob",
+                Name = "Eric",
                 Age = 37
             };
             DataContext = _viewModel;
         }
 
-        private void Update(object sender, RoutedEventArgs e)
+        private async void Update(object sender, RoutedEventArgs e)
         {
-            _viewModel.Name = "Mike";
-            _viewModel.Age = 5;
+            _viewModel.Name = await BuildName();
+            _viewModel.Age = await CalculateAge();
+        }
+
+        [CacheMe]
+        private async Task<string> BuildName()
+        {
+            await Task.Delay(5000);
+            return "Mike";
+        }
+
+        private void Reset(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Name = "Eric";
+            _viewModel.Age = 37;
+        }
+
+        [CacheMe]
+        private async Task<int> CalculateAge()
+        {
+            await Task.Delay(5000);
+            return 2 + 3;
+        }
+    }
+
+    [Serializable]
+    internal class CacheMeAttribute : OnMethodBoundaryAspect
+    {
+        private object _cache = null;
+
+        public override void OnEntry(MethodExecutionArgs args)
+        {
+            if (_cache != null)
+            {
+                args.ReturnValue = _cache;
+                args.FlowBehavior = FlowBehavior.Return;
+            }
+        }
+
+        public override void OnSuccess(MethodExecutionArgs args)
+        {
+            _cache = args.ReturnValue;
         }
     }
 }
@@ -41,33 +87,5 @@ namespace NoCoUG.PostSharp.WPF.ViewModels
         public int Age { get; set; }
     }
 
-    public class MainViewModel2
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-
-    public class MainViewModel3
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-
-    public class MainViewModel4
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-
-    public class MainViewModel5
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-
-    public class MainViewModel6
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
 }
+
