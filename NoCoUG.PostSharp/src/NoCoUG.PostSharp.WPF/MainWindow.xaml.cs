@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using PostSharp.Patterns.Model;
 
 namespace NoCoUG.PostSharp.WPF
 {
@@ -20,8 +21,14 @@ namespace NoCoUG.PostSharp.WPF
             };
             DataContext = _viewModel;
         }
-    }
+            private void Update(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Name = "Mike";
+            _viewModel.Age = 5;
+        }
+}
 
+    [NotifyPropertyChanged]
     public class MainViewModel
     {
         public string Name { get; set; }
