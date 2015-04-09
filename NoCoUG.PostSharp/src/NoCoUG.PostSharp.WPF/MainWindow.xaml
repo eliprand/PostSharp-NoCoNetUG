@@ -19,5 +19,7 @@
             <Run>Age:</Run>
             <Run Text="{Binding Age}"/>
         </TextBlock>
+        
+        <Button Grid.Row="2" Click="Update">Update</Button>
     </Grid>
 </Window>

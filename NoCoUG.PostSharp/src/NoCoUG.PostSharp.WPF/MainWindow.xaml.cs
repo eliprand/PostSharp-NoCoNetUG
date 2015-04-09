@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace NoCoUG.PostSharp.WPF
 {
@@ -20,12 +24,44 @@ namespace NoCoUG.PostSharp.WPF
             };
             DataContext = _viewModel;
         }
+
+        private void Update(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Name = "Mike";
+            _viewModel.Age = 5;
+        }
     }
 
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public int Age { get; set; }
+        private string _name;
+        private int _age;
+
+        public string Name
+        {
+            get { return _name; }
+            set { SetValue(ref _name, value); }
+        }
+
+        public int Age
+        {
+            get { return _age; }
+            set { SetValue(ref _age, value); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void SetValue<T>(ref T field, T value, [CallerMemberName] string name = null)
+        {
+            field = value;
+            OnPropertyChanged(name);
+        }
+
+        protected virtual void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(name));
+        }
     }
 
 }
