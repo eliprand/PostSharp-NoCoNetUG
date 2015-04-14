@@ -17,7 +17,9 @@
         </TextBlock>
         <TextBlock Grid.Row="1">
             <Run>Age:</Run>
-            <Run Text="{Binding Age}"/>
+            <Run Text="{Binding Age}" />
         </TextBlock>
+        <Button Grid.Row="2" Click="Update">Update</Button>
+        <Button Grid.Row="3" Click="Reset">Reset</Button>
     </Grid>
 </Window>

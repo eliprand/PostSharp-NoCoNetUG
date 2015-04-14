@@ -3,6 +3,8 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
+using NoCoUG.PostSharp.WPF;
+using PostSharp.Patterns.Model;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -53,3 +55,10 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// following 2 lines should assign NotifyPropertyChanged to all ViewModels (first line), except MainViewModel2 (2nd line)
+//[assembly: NotifyPropertyChanged(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.ViewModels.*", AttributePriority = 1)]
+//[assembly: NotifyPropertyChanged(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.ViewModels.MainViewModel2", AttributePriority = 2, AttributeExclude = true)]
+
+[assembly: NotifyPropertyChanged(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.ViewModels.*")]
+[assembly: Retry(AttributeTargetTypes = "NoCoUG.PostSharp.WPF.MainWindow", AttributeTargetMembers = "CalculateAge", MaxRetries = 3)]
